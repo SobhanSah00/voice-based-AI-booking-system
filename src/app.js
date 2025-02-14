@@ -13,9 +13,11 @@ app.get("/", (req,res) => {
     res.send("Hello World!")
 })
 
-import WhisperRouter from "./routes/whisper.routes";
+import WhisperRouter from "./routes/whisper.routes.js";
+import gptRouter from "./routes/gptRoutes.routes.js"
 
 app.use("/api/v1/whishper",WhisperRouter)
+app.use("/api/v1/gpt",gptRouter)
 
 export {
     app

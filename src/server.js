@@ -23,6 +23,14 @@ app.post("/voice",async (req,res) => {
     })
 
     await callRecord.save()
+
+    // start recording the call
+    twiml.record({
+        action : `${process.env.SERVER_URL}/api/v1/whishper/transcribe`,
+        method : "POST",
+        maxLength : 60, // this is record time
+        trim : "trim-silence"
+    });
     // Intorduction message
     twiml.say("Hello! I am flex your AI assistant. Let's have a conversation.")
 
@@ -32,6 +40,17 @@ app.post("/voice",async (req,res) => {
     } else {
         console.log("⚠️ WebSocket Server URL is missing.");
     }
+
+    res.type("text/xml")
+    res.send(twiml.toString());
+})
+
+// Endpoint to send AI-generated response as Twilio speech
+app.post("/twilio-response", (req,res) => {
+    const twiml = new twilio.twiml.VoiceResponse();
+    const { aiResponse } = req.body;
+
+    twiml.say(aiResponse || "I'm sorry, I didn't catch that .")
 
     res.type("text/xml")
     res.send(twiml.toString());

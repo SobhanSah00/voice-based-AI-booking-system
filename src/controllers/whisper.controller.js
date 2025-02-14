@@ -3,6 +3,7 @@ import { OpenAI } from "openai"
 import {asyncHandler} from "../utils/asyncHandeler.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {ApiError} from "../utils/ApiError.js"
+import axios from "axios"
 
 
 const openai = new OpenAI({
@@ -22,9 +23,12 @@ export const transcribeAudio = asyncHandler(async (req,res) => {
             model : "whisper-1",
             language : "en",
         });
-        fs.unlinkSync(audioPath);
+        const userText = response.text
+        fs.unlinkSync(audioPath); // deelte the temporary files
 
-        return res.status(200).json(new ApiResponse({text : response.text}))
+        const aiRsponce = await axios.post(`${process.env.SERVER_URL}/api/v1/gpt/chat`, {text : userText})
+
+        return res.status(200).json(new ApiResponse({userText,aiRsponce : aiRsponce.data.response}))
     }
     catch (error) {
         console.error("❌ Whisper API Error:", error);

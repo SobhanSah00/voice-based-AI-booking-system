@@ -1,6 +1,6 @@
 import mongoose,{Schema} from "mongoose";
 
-const CallDataSchema = new mongoose.Schema({
+const CallDataSchema = new Schema({
     callerId: { 
         type: String,
          required: true
@@ -28,6 +28,6 @@ const CallDataSchema = new mongoose.Schema({
     }
 });
 
-const CallData = mongoose.model("calldatas", CallDataSchema);
+const CallData = mongoose.model("CallData", CallDataSchema);
 
 export default CallData;
