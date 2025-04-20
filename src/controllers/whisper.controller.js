@@ -14,7 +14,7 @@ export const transcribeAudio = asyncHandler(async (req,res) => {
     try {
         if (!req.file) {
             return new ApiResponse(400, "No file provided")
-        }
+        }  
         const audioPath = req.file.path;
 
         // transcribing using whishper api
